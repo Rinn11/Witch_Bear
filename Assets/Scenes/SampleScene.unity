@@ -3135,6 +3135,8 @@ MonoBehaviour:
   decceleration: 0.6
   jumpForce: 3
   rb: {fileID: 359829456}
+  audioSource: {fileID: 359829460}
+  eatingSound: {fileID: 8300000, guid: 4b840d4a742f98044a0418d9a54fa869, type: 3}
 --- !u!114 &359829458
 MonoBehaviour:
   m_ObjectHideFlags: 0

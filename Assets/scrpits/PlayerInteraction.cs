@@ -4,6 +4,8 @@ using UnityEngine.InputSystem;
 
 public class PlayerInteraction : MonoBehaviour
 {
+    PlayerController controller;
+
     public Camera playerCamera;
     public float interactionDistance = 3f;
     public Image eatingProgressBar;
@@ -80,6 +82,8 @@ public class PlayerInteraction : MonoBehaviour
     {
         if (currentItem != null)
         {
+
+            this.GetComponent<PlayerController>().StartEating();
             currentItem.ApplyEffect(GetComponent<PlayerController>());
             Destroy(currentItem.gameObject);
             CancelEating();

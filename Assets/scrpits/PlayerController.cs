@@ -44,9 +44,13 @@ public class PlayerController : MonoBehaviour
     private float rotateSpeed = 3;
     private float rotate;
 
+    public AudioSource audioSource;
+    public AudioClip eatingSound;
+
     private void Awake()
     {
         playerControls = new PlayerControls();
+
         rb = GetComponent<Rigidbody>();
 
         rotate = rotateSpeed;
@@ -71,11 +75,13 @@ public class PlayerController : MonoBehaviour
         playerHead.transform.eulerAngles = rotation * rotate;
     }
 
-    // Physics-based movement
+    // Physics based movement
     void FixedUpdate()
     {
+        // Translate input to world-space movement based on player's forward and right vectors
         Vector3 moveDirectionTrue = transform.forward * moveDirection.y + transform.right * moveDirection.x;
-        playerMovement = moveDirectionTrue * currentSpeed + new Vector3(0, grounded() ? rb.velocity.y + (jumping * jumpForce * jumpMultiplier) : rb.velocity.y, 0);
+        playerMovement = moveDirectionTrue * currentSpeed + new Vector3(0, grounded() ? rb.velocity.y + (jumping * jumpForce * jumpMultiplier) : rb.velocity.y, 0); // Preserve vertical velocity (e.g., gravity)
+
         rb.velocity = playerMovement;
     }
 
@@ -97,7 +103,6 @@ public class PlayerController : MonoBehaviour
     public void ApplySpeedMultiplier(float multiplier)
     {
         moveSpeed = originalMoveSpeed * multiplier;
-        currentSpeed = moveSpeed;
         Debug.Log("Speed changed to: " + moveSpeed);
     }
 
@@ -105,6 +110,14 @@ public class PlayerController : MonoBehaviour
     {
         jumpMultiplier = multiplier;
         Debug.Log("Jump height changed to: " + (jumpForce * jumpMultiplier));
+    }
+
+    public void StartEating()
+    {
+        if (audioSource != null && eatingSound != null)
+        {
+            audioSource.PlayOneShot(eatingSound);
+        }
     }
 
     private void OnEnable()
@@ -117,7 +130,6 @@ public class PlayerController : MonoBehaviour
         move = playerControls.Player.Move;
         move.Enable();
     }
-
     private void OnDisable()
     {
         move.Disable();
