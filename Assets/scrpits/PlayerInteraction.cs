@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using TMPro;
 
 public class PlayerInteraction : MonoBehaviour
 {
@@ -15,6 +16,7 @@ public class PlayerInteraction : MonoBehaviour
     private float eatProgress = 0f;
 
     public GameObject HungerBar;
+    public TextMeshPro munchTime;
 
     private bool isEating = false;
 
