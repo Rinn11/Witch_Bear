@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     private float jumpMultiplier = 1.0f;
     private float originalMoveSpeed;
 
+    private Quaternion originalCameraRotation;
+
     public PlayerControls playerControls;
 
     private InputAction move;
@@ -48,6 +50,25 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioSource;
     public AudioClip eatingSound;
 
+    public float sprintSpeedMultiplier = 1.5f;
+
+    private Vector3 originalScale;
+
+    public Camera playerCamera;
+
+    private bool reversedControls = false;
+    private bool isFlipped = false;
+    private bool hasStrengthBuff = false;
+    private bool isShrunk = false;
+    private string activeEffect = "None";
+
+    private void Start()
+    {
+        originalMoveSpeed = moveSpeed;
+        originalScale = transform.localScale;
+        originalCameraRotation = playerCamera.transform.rotation;
+    }
+
     private void Awake()
     {
         playerControls = new PlayerControls();
@@ -62,7 +83,6 @@ public class PlayerController : MonoBehaviour
         originalMoveSpeed = moveSpeed;
     }
 
-    // Update is called once per frame
     void Update()
     {
         playerLook();
@@ -75,45 +95,89 @@ public class PlayerController : MonoBehaviour
         transform.eulerAngles = new Vector2(0, rotation.y * rotate);
 
         rotation.x += -Input.GetAxis("Mouse Y");
-        rotation.x = Mathf.Clamp(rotation.x, -60 / rotate, 60 / rotate); // Limit vertical look angle
+        rotation.x = Mathf.Clamp(rotation.x, -60 / rotate, 60 / rotate);
         playerHead.transform.eulerAngles = rotation * rotate;
     }
 
-    // Physics based movement
     void FixedUpdate()
     {
-        // Translate input to world-space movement based on player's forward and right vectors
         Vector3 moveDirectionTrue = transform.forward * moveDirection.y + transform.right * moveDirection.x;
-        playerMovement = moveDirectionTrue * currentSpeed + new Vector3(0, grounded() ? rb.velocity.y + (jumping * jumpForce * jumpMultiplier) : rb.velocity.y, 0); // Preserve vertical velocity (e.g., gravity)
+        playerMovement = moveDirectionTrue * currentSpeed;
 
         rb.velocity = playerMovement;
     }
 
-    public void fire(InputAction.CallbackContext context)
-    {
-
-    }
-
-    private void runFast(InputAction.CallbackContext context)
-    {
-        accelSpeed = context.performed ? moveSpeed * sprintSpeedMutiplyer : moveSpeed;
-    }
-
-    private bool grounded()
-    {
-        return rb.velocity.y == 0;
-    }
-
     public void ApplySpeedMultiplier(float multiplier)
     {
+        if (activeEffect != "Speed") ResetEffects();
         moveSpeed = originalMoveSpeed * multiplier;
+        activeEffect = "Speed";
         Debug.Log("Speed changed to: " + moveSpeed);
     }
 
     public void ApplyJumpBoost(float multiplier)
     {
+        if (activeEffect != "Jump") ResetEffects();
         jumpMultiplier = multiplier;
+        activeEffect = "Jump";
         Debug.Log("Jump height changed to: " + (jumpForce * jumpMultiplier));
+    }
+
+    public void EnableStrengthBuff()
+    {
+        if (activeEffect != "Strength") ResetEffects();
+        hasStrengthBuff = true;
+        activeEffect = "Strength";
+        Debug.Log("Strength Buff Activated!");
+    }
+
+    public void ShrinkPlayer()
+    {
+        if (activeEffect != "Shrink") ResetEffects();
+        transform.localScale = originalScale * 0.5f;
+        isShrunk = true;
+        activeEffect = "Shrink";
+        Debug.Log("Player Shrunk!");
+    }
+
+    public void ReverseControls()
+    {
+        if (activeEffect != "Reverse") ResetEffects();
+        reversedControls = true;
+        activeEffect = "Reverse";
+        Debug.Log("Controls Reversed!");
+    }
+
+    public void FlipScreen()
+    {
+        if (activeEffect != "Flip") ResetEffects();
+        playerCamera.transform.Rotate(0, 0, 180);
+        isFlipped = true;
+        activeEffect = "Flip";
+        Debug.Log("Screen Flipped!");
+    }
+
+    public void TeleportPlayer()
+    {
+        if (activeEffect != "Teleport") ResetEffects();
+        Vector3 randomOffset = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
+        transform.position += randomOffset;
+        activeEffect = "Teleport";
+        Debug.Log("Player Teleported!");
+    }
+
+    private void ResetEffects()
+    {
+        hasStrengthBuff = false;
+        reversedControls = false;
+        isFlipped = false;
+        isShrunk = false;
+        moveSpeed = originalMoveSpeed;
+        transform.localScale = originalScale;
+        playerCamera.transform.rotation = originalCameraRotation;
+        jumpMultiplier = 1.0f;
+        activeEffect = "None";
+        Debug.Log("Effects Reset");
     }
 
     public void StartEating()
@@ -128,12 +192,11 @@ public class PlayerController : MonoBehaviour
     {
         attack = playerControls.Player.Fire;
         attack.Enable();
-        attack.performed += fire;
-        attack.canceled += fire;
 
         move = playerControls.Player.Move;
         move.Enable();
     }
+
     private void OnDisable()
     {
         move.Disable();

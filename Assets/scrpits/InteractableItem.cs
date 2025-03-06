@@ -9,12 +9,11 @@ public class InteractableItem : MonoBehaviour
     public Color highColor;
     public Image mistImage;
 
-    public enum ItemEffectType { SpeedBoost, Slowdown, HighJump, OpenDoor }
+    public enum ItemEffectType { SpeedBoost, Slowdown, HighJump, OpenDoor, StrengthBuff, Shrink, ReverseControls, FlipScreen, Teleport }
     public ItemEffectType effectType;
     public float effectValue = 1.5f; // Default multiplier for speed/jump
 
     public GameObject door;
-
 
     void Start()
     {
@@ -29,13 +28,12 @@ public class InteractableItem : MonoBehaviour
 
     public void ApplyEffect(PlayerController player)
     {
-
-        mistImage.color = highColor;
+        //mistImage.color = highColor;
 
         switch (effectType)
         {
             case ItemEffectType.SpeedBoost:
-                player.ApplySpeedMultiplier(effectValue); 
+                player.ApplySpeedMultiplier(effectValue);
                 break;
             case ItemEffectType.Slowdown:
                 player.ApplySpeedMultiplier(1 / effectValue);
@@ -46,6 +44,21 @@ public class InteractableItem : MonoBehaviour
             case ItemEffectType.OpenDoor:
                 OpenNearbyDoor();
                 break;
+            case ItemEffectType.StrengthBuff:
+                player.EnableStrengthBuff();
+                break;
+            case ItemEffectType.Shrink:
+                player.ShrinkPlayer();
+                break;
+            case ItemEffectType.ReverseControls:
+                player.ReverseControls();
+                break;
+            case ItemEffectType.FlipScreen:
+                player.FlipScreen();
+                break;
+            case ItemEffectType.Teleport:
+                player.TeleportPlayer();
+                break;
         }
 
         Destroy(gameObject); // Remove item after use
@@ -54,7 +67,6 @@ public class InteractableItem : MonoBehaviour
     private void OpenNearbyDoor()
     {
         Debug.Log("Door opened!");
-        door.SetActive(false);
+        door.GetComponent<InteractableItem>().enabled = true; 
     }
-
 }
