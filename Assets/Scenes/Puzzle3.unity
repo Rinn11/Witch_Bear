@@ -4328,7 +4328,7 @@ Transform:
   m_GameObject: {fileID: 540246739}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.05024909, z: -0, w: 0.9987368}
-  m_LocalPosition: {x: -25.209778, y: 59.938904, z: 93.98634}
+  m_LocalPosition: {x: -25.3, y: 59.938904, z: 93.98634}
   m_LocalScale: {x: 0.22901307, y: 0.21176, z: 0.35716844}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -11765,7 +11765,7 @@ GameObject:
   - component: {fileID: 1643614360}
   - component: {fileID: 1643614364}
   m_Layer: 0
-  m_Name: Boulder
+  m_Name: Second Boulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12513,7 +12513,7 @@ GameObject:
   - component: {fileID: 1883051624}
   - component: {fileID: 1883051623}
   m_Layer: 0
-  m_Name: Second boulder
+  m_Name: First Boulder
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
