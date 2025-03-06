@@ -20,6 +20,11 @@ public class PlayerInteraction : MonoBehaviour
 
     private bool isEating = false;
 
+    private void Start()
+    {
+        munchTime.text = "";
+    }
+
     void Update()
     {
         DetectItem();

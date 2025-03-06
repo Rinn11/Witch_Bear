@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -7,10 +8,15 @@ using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
 using Cursor = UnityEngine.Cursor;
+using Image = UnityEngine.UI.Image;
 
 public class PlayerController : MonoBehaviour
 {
+    public Image effectUI;
+
     public float grvityMutiplyer;
+
+    private float zRotate = 0;
 
     public float moveSpeed;
     public float sprintSpeedMutiplyer = 1.5f;
@@ -98,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
         rotation.x += -Input.GetAxis("Mouse Y");
         rotation.x = Mathf.Clamp(rotation.x, -60 / rotate, 60 / rotate);
-        playerHead.transform.eulerAngles = rotation * rotate;
+        playerHead.transform.eulerAngles = new Vector3(rotation.x,rotation.y,zRotate) * rotate;
     }
 
     void FixedUpdate()
@@ -110,74 +116,84 @@ public class PlayerController : MonoBehaviour
         rb.velocity = new Vector3(playerMovement.x, -grvityMutiplyer, playerMovement.z);
     }
 
-    public void ApplySpeedMultiplier(float multiplier)
+    public void ApplySpeedMultiplier(float multiplier, Sprite effect)
     {
         if (activeEffect != "Speed") ResetEffects();
+        effectUI.sprite = effect;
+
         moveSpeed = originalMoveSpeed * multiplier;
         activeEffect = "Speed";
         Debug.Log("Speed changed to: " + moveSpeed);
     }
 
-    public void ApplyJumpBoost(float multiplier)
+    public void ApplyJumpBoost(float multiplier, Sprite effect)
     {
         if (activeEffect != "Jump") ResetEffects();
+
+        effectUI.sprite = effect;
         jumpMultiplier = multiplier;
         activeEffect = "Jump";
         Debug.Log("Jump height changed to: " + (jumpForce * jumpMultiplier));
     }
 
-    public void EnableStrengthBuff()
+    public void EnableStrengthBuff(Sprite effect)
     {
         if (activeEffect != "Strength") ResetEffects();
+        effectUI.sprite = effect;
         hasStrengthBuff = true;
         activeEffect = "Strength";
         Debug.Log("Strength Buff Activated!");
     }
 
-    public void ShrinkPlayer()
+    public void ShrinkPlayer(Sprite effect)
     {
         if (activeEffect != "Shrink") ResetEffects();
+        effectUI.sprite = effect;
         transform.localScale = originalScale * 0.5f;
         isShrunk = true;
         activeEffect = "Shrink";
         Debug.Log("Player Shrunk!");
     }
 
-    public void ReverseControls()
+    public void ReverseControls(Sprite effect)
     {
         if (activeEffect != "Reverse") ResetEffects();
         reversedControls = true;
+        effectUI.sprite = effect;
         activeEffect = "Reverse";
         Debug.Log("Controls Reversed!");
     }
 
-    public void FlipScreen()
+    public void FlipScreen(Sprite effect)
     {
         if (activeEffect != "Flip") ResetEffects();
-        playerCamera.transform.Rotate(0, 0, 180);
+        zRotate = 180;
+        effectUI.sprite = effect;
         isFlipped = true;
         activeEffect = "Flip";
         Debug.Log("Screen Flipped!");
     }
 
-    public void TeleportPlayer()
+    public void TeleportPlayer(Sprite effect)
     {
         if (activeEffect != "Teleport") ResetEffects();
-        Vector3 randomOffset = new Vector3(Random.Range(-10, 10), 0, Random.Range(-10, 10));
+        Vector3 randomOffset = new Vector3(Random.Range(-3, 3), 0, Random.Range(-3, 3));
         transform.position += randomOffset;
         activeEffect = "Teleport";
+        effectUI.sprite = effect;
         Debug.Log("Player Teleported!");
     }
 
     private void ResetEffects()
     {
+       // effectUI = null;
         hasStrengthBuff = false;
         reversedControls = false;
         isFlipped = false;
         isShrunk = false;
         moveSpeed = originalMoveSpeed;
         transform.localScale = originalScale;
-        playerCamera.transform.rotation = originalCameraRotation;
+        zRotate = 0;
         jumpMultiplier = 1.0f;
         activeEffect = "None";
         Debug.Log("Effects Reset");

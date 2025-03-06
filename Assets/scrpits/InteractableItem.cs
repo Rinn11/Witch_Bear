@@ -6,8 +6,7 @@ public class InteractableItem : MonoBehaviour
     private Renderer itemRenderer;
     private Color originalColor;
 
-    public Color highColor;
-    public Image mistImage;
+    public Sprite effectImg;
 
     public enum ItemEffectType { SpeedBoost, Slowdown, HighJump, OpenDoor, StrengthBuff, Shrink, ReverseControls, FlipScreen, Teleport }
     public ItemEffectType effectType;
@@ -33,31 +32,31 @@ public class InteractableItem : MonoBehaviour
         switch (effectType)
         {
             case ItemEffectType.SpeedBoost:
-                player.ApplySpeedMultiplier(effectValue);
+                player.ApplySpeedMultiplier(effectValue, effectImg);
                 break;
             case ItemEffectType.Slowdown:
-                player.ApplySpeedMultiplier(1 / effectValue);
+                player.ApplySpeedMultiplier(effectValue, effectImg);
                 break;
             case ItemEffectType.HighJump:
-                player.ApplyJumpBoost(effectValue);
+                player.ApplyJumpBoost(effectValue, effectImg);
                 break;
             case ItemEffectType.OpenDoor:
                 OpenNearbyDoor();
                 break;
             case ItemEffectType.StrengthBuff:
-                player.EnableStrengthBuff();
+                player.EnableStrengthBuff(effectImg);
                 break;
             case ItemEffectType.Shrink:
-                player.ShrinkPlayer();
+                player.ShrinkPlayer(effectImg);
                 break;
             case ItemEffectType.ReverseControls:
-                player.ReverseControls();
+                player.ReverseControls(effectImg);
                 break;
             case ItemEffectType.FlipScreen:
-                player.FlipScreen();
+                player.FlipScreen(effectImg);
                 break;
             case ItemEffectType.Teleport:
-                player.TeleportPlayer();
+                player.TeleportPlayer(effectImg);
                 break;
         }
 
