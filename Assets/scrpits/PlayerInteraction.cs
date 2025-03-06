@@ -16,7 +16,7 @@ public class PlayerInteraction : MonoBehaviour
     private float eatProgress = 0f;
 
     public GameObject HungerBar;
-    public TextMeshPro munchTime;
+    public TextMeshProUGUI munchTime;
 
     private bool isEating = false;
 
@@ -39,6 +39,7 @@ public class PlayerInteraction : MonoBehaviour
         if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward, out RaycastHit hit, interactionDistance))
         {
             InteractableItem item = hit.collider.GetComponent<InteractableItem>();
+            
             if (item != null)
             {
                 if (currentItem != item)
@@ -46,6 +47,7 @@ public class PlayerInteraction : MonoBehaviour
                     if (currentItem != null) currentItem.Highlight(false);
                     currentItem = item;
                     currentItem.Highlight(true);
+                    munchTime.text = "Munch";
                 }
                 return;
             }
@@ -53,6 +55,7 @@ public class PlayerInteraction : MonoBehaviour
 
         if (currentItem != null)
         {
+            munchTime.text = "";
             currentItem.Highlight(false);
             currentItem = null;
         }

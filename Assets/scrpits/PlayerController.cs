@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 using static UnityEditor.Timeline.TimelinePlaybackControls;
+using Cursor = UnityEngine.Cursor;
 
 public class PlayerController : MonoBehaviour
 {
@@ -52,6 +53,9 @@ public class PlayerController : MonoBehaviour
         playerControls = new PlayerControls();
 
         rb = GetComponent<Rigidbody>();
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
 
         rotate = rotateSpeed;
         currentSpeed = moveSpeed;

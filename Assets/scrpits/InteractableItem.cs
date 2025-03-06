@@ -1,9 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 public class InteractableItem : MonoBehaviour
 {
     private Renderer itemRenderer;
     private Color originalColor;
+
+    public Color highColor;
+    public Image mistImage;
 
     public enum ItemEffectType { SpeedBoost, Slowdown, HighJump, OpenDoor }
     public ItemEffectType effectType;
@@ -25,10 +29,13 @@ public class InteractableItem : MonoBehaviour
 
     public void ApplyEffect(PlayerController player)
     {
+
+        mistImage.color = highColor;
+
         switch (effectType)
         {
             case ItemEffectType.SpeedBoost:
-                player.ApplySpeedMultiplier(effectValue);
+                player.ApplySpeedMultiplier(effectValue); 
                 break;
             case ItemEffectType.Slowdown:
                 player.ApplySpeedMultiplier(1 / effectValue);
