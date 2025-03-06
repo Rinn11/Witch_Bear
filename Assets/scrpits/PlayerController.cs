@@ -10,6 +10,8 @@ using Cursor = UnityEngine.Cursor;
 
 public class PlayerController : MonoBehaviour
 {
+    public float grvityMutiplyer;
+
     public float moveSpeed;
     public float sprintSpeedMutiplyer = 1.5f;
     public Camera playerHead;
@@ -104,7 +106,8 @@ public class PlayerController : MonoBehaviour
         Vector3 moveDirectionTrue = transform.forward * moveDirection.y + transform.right * moveDirection.x;
         playerMovement = moveDirectionTrue * currentSpeed;
 
-        rb.velocity = playerMovement;
+        //rb.velocity = playerMovement;
+        rb.velocity = new Vector3(playerMovement.x, -grvityMutiplyer, playerMovement.z);
     }
 
     public void ApplySpeedMultiplier(float multiplier)

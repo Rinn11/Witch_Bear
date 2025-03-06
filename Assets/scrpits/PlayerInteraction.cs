@@ -40,7 +40,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             InteractableItem item = hit.collider.GetComponent<InteractableItem>();
             
-            if (item != null)
+            if (item != null && item.GetComponent<InteractableItem>().isActiveAndEnabled)
             {
                 if (currentItem != item)
                 {
