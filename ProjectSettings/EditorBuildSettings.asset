@@ -4,6 +4,15 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Main - Copy.unity
+    guid: 31d9495350743f049acb53644f0bfa98
+  - enabled: 1
+    path: Assets/Scenes/MushroomPuzzle.unity
+    guid: 2e90f7e8de36e6d4ca90fcc4ce773cf4
+  - enabled: 1
+    path: Assets/Scenes/Puzzle3.unity
+    guid: bb022f8a4350741e7b8ac26e55c06fa0
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: a64dbea8d4b52664d956512af87e4d05, type: 3}
